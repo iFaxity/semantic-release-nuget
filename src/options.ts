@@ -1,52 +1,22 @@
 import { Context } from 'semantic-release';
+import { z } from 'zod';
 
-export interface PluginOptions {
-    /**
-     * The URL to push NuGet packages.
-     */
-    pushUrl?: string;
-    /**
-     * The API key used for pushing.
-     */
-    apiKey?: string;
-    /**
-     * The arguments to the `dotnet pack` command. Defaults to '-s Release'.
-     */
-    packArguments?: string[];
-    /**
-     * The path to the `dotnet nuget push` command. Defaults to '*.nupkg'.
-     */
-    pushFiles?: string[];
-}
+const PluginOptions = z.object({
+    pushUrl: z.string().default(''),
+    apiKey: z.string().default(''),
+    packArguments: z.array(z.string()).default([]),
+    pushFiles: z.array(z.string()).default([]),
+});
 
-export interface ResolvedPluginOptions {
-    pushUrl: string;
-    apiKey: string;
-    packArguments: string[];
-    pushFiles: string[];
-}
+export type PluginOptions = z.infer<typeof PluginOptions>;
 
-function ensureArray(input: undefined|string|string[]): string[]|null {
-    if (input == null) {
-        return null;
-    }
-
-    return typeof input == 'string'
-        ? input.split(/\s+/g)
-        : input;
-}
-
-export function resolveOptions(
-    options: PluginOptions,
+export async function resolveOptions(
+    options: Partial<PluginOptions>,
     context: Context
-): ResolvedPluginOptions {
+): Promise<PluginOptions> {
     const { env } = context;
-    const { pushUrl, apiKey, packArguments, pushFiles } = options;
+    const pushUrl = options?.pushUrl ?? env.NUGET_PUSH_URL;
+    const apiKey = options?.apiKey ?? env.NUGET_TOKEN;
 
-    return {
-        pushUrl: pushUrl ?? env.NUGET_PUSH_URL ?? '',
-        apiKey: apiKey?? env.NUGET_TOKEN ?? '',
-        packArguments: ensureArray(packArguments) ?? [ ],
-        pushFiles: ensureArray(pushFiles) ?? [ '*.nupkg' ],
-    };
+    return PluginOptions.parseAsync({ ...options, pushUrl, apiKey });
 }
