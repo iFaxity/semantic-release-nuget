@@ -1,6 +1,6 @@
 import { Config, Context } from 'semantic-release';
 import { PluginOptions, resolveOptions } from './options';
-import { execa } from 'execa';
+import execa from 'execa';
 
 const NUGET_VERSION_REGEX = /^NuGet Command Line\s+([0-9.]+)$/m;
 
@@ -18,12 +18,12 @@ export async function verifyConditions(
 
   logger.debug('options', resolved);
 
-  if (!resolved.pushUrl) {
-    errors.push('NUGET_PUSH_URL or the pushUrl option must be set');
+  if (!resolved.push.source) {
+    errors.push('NUGET_SOURCE or the push.source option must be set');
   }
 
-  if (!resolved.apiKey) {
-    errors.push('NUGET_TOKEN or the apiKey option must be set');
+  if (!resolved.push.apiKey) {
+    errors.push('NUGET_TOKEN or the push.apiKey option must be set');
   }
 
   // Make sure we have access to the `dotnet nuget` command.
@@ -39,7 +39,7 @@ export async function verifyConditions(
       if (match != null && match.length == 2) {
         logger.info(`Using NuGet version ${match[1]}`);
       } else {
-        errors.push(`'dotnet nuget --version' didn't respond as expected: ${stdout}`);
+        logger.warn(`'dotnet nuget --version' didn't respond as expected: ${stdout}`);
       }
     }
   } catch {

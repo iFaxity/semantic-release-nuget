@@ -1,21 +1,30 @@
 import { Config, Context } from 'semantic-release';
-import { PluginOptions, resolveOptions } from './options';
-import { execa } from 'execa';
+import { normalizeArgs, PluginOptions, resolveOptions, stringifyArgs } from './options';
+import execa from 'execa';
 
 export async function prepare(
   options: Config & PluginOptions,
   context: Context
 ): Promise<void> {
-  // Resolve the options and make sure we have them all populated.
-  const resolved = await resolveOptions(options, context);
-
   const { logger } = context;
 
-  // Run the pack commands.
-  logger.info(`Running the 'dotnet pack' command`);
-  const pack = await execa('dotnet', [ 'pack', ...resolved.packArguments ]);
+  // Resolve the options and make sure we have them all populated.
+  const resolved = await resolveOptions(options, context);
+  const { args, project, ...pack } = resolved.pack;
 
-  if (pack.failed) {
-    throw new Error(`Cannot run 'dotnet pack'\n\n${pack.stdout}`);
+  // Run the pack command.
+  logger.info(`Running the 'dotnet pack' command`);
+
+  const packArgs = normalizeArgs(
+    'pack',
+    project,
+    ...stringifyArgs(pack),
+    ...args,
+    `-p:Version=${context.nextRelease?.version}`
+  );
+  const packCommand = await execa('dotnet', packArgs);
+
+  if (packCommand.failed) {
+    throw new Error(`Cannot run 'dotnet pack'\n\n${packCommand.stdout}`);
   }
 }
