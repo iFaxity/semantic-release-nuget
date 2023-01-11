@@ -18,11 +18,11 @@ export async function verifyConditions(
 
   logger.debug('options', resolved);
 
-  if (!resolved.push.source) {
+  if (!resolved.source) {
     errors.push('NUGET_SOURCE or the push.source option must be set');
   }
 
-  if (!resolved.push.apiKey) {
+  if (!resolved.apiKey) {
     errors.push('NUGET_TOKEN or the push.apiKey option must be set');
   }
 
