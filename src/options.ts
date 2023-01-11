@@ -19,7 +19,7 @@ const PluginOptions = z.object({
     // Other
     packArguments: z.array(z.string()).default([]),
     // Push
-    assets: z.array(z.string()).default([ '*.nupkg' ]),
+    asset: z.string().default('*.nupkg'),
     apiKey: z.string().optional(),
     source: z.string().optional(),
     skipDuplicate: z.boolean().default(false),

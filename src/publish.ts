@@ -34,7 +34,7 @@ export async function publish(
   const pushCommand = await execa('dotnet', [
     'nuget',
     'push',
-    ...resolved.assets,
+    resolved.asset,
     ...resolved.pushArguments,
   ]);
 
