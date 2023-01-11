@@ -6,11 +6,13 @@ export async function prepare(
   options: Config & PluginOptions,
   context: Context
 ): Promise<void> {
-  const { logger } = context;
-
   // Resolve the options and make sure we have them all populated.
+  const { logger } = context;
   const resolved = await resolveOptions(options, context);
   const args: string[] = [];
+
+  const properties = Object.keys(resolved.properties)
+    .map(key => `-p:${key}=${resolved.properties[key]}`);
 
   if (resolved.project) {
     args.push(resolved.project);
@@ -59,7 +61,7 @@ export async function prepare(
     'pack',
     ...args,
     ...resolved.packArguments,
-    `-p:Version=${context.nextRelease?.version}`
+    ...properties,
   ]);
 
   if (packCommand.failed) {

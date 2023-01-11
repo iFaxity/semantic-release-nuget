@@ -11,6 +11,7 @@ const PluginOptions = z.object({
     includeSource: z.boolean().default(false),
     includeSymbols: z.boolean().default(false),
     dependencies: z.boolean().optional().default(false),
+    properties: z.record(z.union([ z.string(), z.number(), z.boolean() ])),
     // Restore
     restore: z.boolean().default(false),
     force: z.boolean().default(false),
@@ -32,11 +33,18 @@ export async function resolveOptions(
     options: Partial<PluginOptions>,
     context: Context
 ): Promise<PluginOptions> {
-    const { env } = context;
+    const { env, nextRelease } = context;
+    const properties = options?.properties ?? {};
+
+    // Force Version property to be set to nextRelease.version
+    if (nextRelease?.version) {
+        properties.Version = nextRelease.version;
+    }
 
     return PluginOptions.parseAsync({
         source: env.NUGET_SOURCE,
         apiKey: env.NUGET_TOKEN,
         ...options,
+        properties,
     });
 }
