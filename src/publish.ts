@@ -1,6 +1,6 @@
 import { Config, Context } from 'semantic-release';
 import { PluginOptions, resolveOptions } from './options';
-import execa from 'execa';
+import { execPipe } from './execPipe'
 
 export async function publish(
   options: Config & PluginOptions,
@@ -29,16 +29,16 @@ export async function publish(
   }
 
   // Run the push command.
-  logger.info('Running the dotnet nuget push command');
+  logger.info('Running the dotnet nuget push command.');
 
-  const pushCommand = await execa('dotnet', [
+  const pushCommand = await execPipe('dotnet', [
     'nuget',
     'push',
     resolved.asset,
     ...resolved.pushArguments,
-  ]);
+  ], options);
 
   if (pushCommand.failed) {
-    throw new Error(`Cannot run 'dotnet nuget push'\n\n${pushCommand.stdout}`);
+    throw new Error(`Cannot run 'dotnet nuget push'!`);
   }
 }

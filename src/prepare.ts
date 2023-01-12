@@ -1,6 +1,6 @@
 import { Config, Context } from 'semantic-release';
 import { PluginOptions, resolveOptions } from './options';
-import execa from 'execa';
+import { execPipe } from './execPipe';
 
 export async function prepare(
   options: Config & PluginOptions,
@@ -55,16 +55,16 @@ export async function prepare(
   }
 
   // Run the pack command.
-  logger.info(`Running the 'dotnet pack' command`);
+  logger.info(`Running the 'dotnet pack' command.`);
 
-  const packCommand = await execa('dotnet', [
+  const packCommand = await execPipe('dotnet', [
     'pack',
     ...args,
     ...resolved.packArguments,
     ...properties,
-  ]);
+  ], options);
 
   if (packCommand.failed) {
-    throw new Error(`Cannot run 'dotnet pack'\n\n${packCommand.stdout}`);
+    throw new Error(`Cannot run 'dotnet pack'!`);
   }
 }
