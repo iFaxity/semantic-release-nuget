@@ -26,10 +26,6 @@ export async function prepare(
     args.push('--runtime', resolved.runtime);
   }
 
-  if (!resolved.build) {
-    args.push('--no-build');
-  }
-
   if (resolved.output) {
     args.push('--output', resolved.output);
   }
@@ -42,16 +38,20 @@ export async function prepare(
     args.push('--include-symbols');
   }
 
-  if (resolved.restore) {
-    if (!resolved.dependencies) {
-      args.push('--no-dependencies');
-    }
+  if (resolved.build) {
+    if (resolved.restore) {
+      if (!resolved.dependencies) {
+        args.push('--no-dependencies');
+      }
 
-    if (resolved.force) {
-      args.push('--force');
+      if (resolved.force) {
+        args.push('--force');
+      }
+    } else {
+      args.push('--no-restore');
     }
   } else {
-    args.push('--no-restore');
+    args.push('--no-build');
   }
 
   // Run the pack command.
