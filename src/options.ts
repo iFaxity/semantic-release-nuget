@@ -43,7 +43,7 @@ export async function resolveOptions(
 
     return PluginOptions.parseAsync({
         source: env.NUGET_SOURCE,
-        apiKey: env.NUGET_TOKEN,
+        apiKey: env.NUGET_API_KEY,
         ...options,
         properties,
     });
