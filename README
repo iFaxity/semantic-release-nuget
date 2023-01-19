@@ -47,7 +47,6 @@ With this example:
 - The package will be prepared by @ifaxity/semantic-release-nuget
 - The package will be published by @ifaxity/semantic-release-nuget
 
-
 **Note**: it's recommended to include @ifaxity/semantic-release-dotnet directly before this plugin or some other custom way.
 
 
@@ -64,10 +63,14 @@ The Nuget authentication configuration is **required** and can be set via [envir
 
 ### Environment variables
 
-| Variable       | Description                                                                              |
-| -------------- | ---------------------------------------------------------------------------------------- |
-| `NUGET_API_KEY` | Nuget API Key, (to create one for nuget.org go to https://www.nuget.org/account/apikeys) |
-| `NUGET_SOURCE`  | Nuget source url (for nuget.org this is https://api.nuget.org/v3/index.json)             |
+| Variable             | Description                                                                                  |
+|----------------------|----------------------------------------------------------------------------------------------|
+| `NUGET_API_KEY`      | Nuget API Key, (to create one for nuget.org go to https://www.nuget.org/account/apikeys).     |
+| `NUGET_SOURCE`       | Nuget source url (for nuget.org this is https://api.nuget.org/v3/index.json).                 |
+| `NUGET_ASSET`        | Asset to push to Nuget, supports glob patterns so *.nupkg publishes all the packages in cwd.  |
+| `PACK_PROJECT`       | Project to pack, should be an absolute reference to a csproj file or a directory.             |
+| `PACK_CONFIGURATION` | Sets the configuration when building the project (only works if option `build: true` is set). |
+| `PACK_OUTPUT`        | Sets the output directory of the `nuget pack` command. Defaults to cwd. |
 
 
 ### Options

@@ -42,6 +42,10 @@ export async function resolveOptions(
     }
 
     return PluginOptions.parseAsync({
+        project: env.PACK_PROJECT,
+        configuration: env.PACK_CONFIGURATION,
+        output: env.PACK_OUTPUT,
+        asset: env.NUGET_ASSET,
         source: env.NUGET_SOURCE,
         apiKey: env.NUGET_API_KEY,
         ...options,
