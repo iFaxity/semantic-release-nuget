@@ -2,7 +2,7 @@
   "name": "@ifaxity/semantic-release-nuget",
   "version": "0.0.0",
   "author": "iFaxity (christian@faxity.se)",
-  "description": "A semantic-release plugin for building and publishing NuGet packages.",
+  "description": "A semantic-release plugin for packing and publishing NuGet packages.",
   "license": "MIT",
   "files": [
     "dist/*"
@@ -16,6 +16,9 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "dev": "unbuild --stub",
