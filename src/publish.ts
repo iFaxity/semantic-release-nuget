@@ -35,6 +35,7 @@ export async function publish(
     'nuget',
     'push',
     resolved.asset,
+    ...args,
     ...resolved.pushArguments,
   ], options);
 
