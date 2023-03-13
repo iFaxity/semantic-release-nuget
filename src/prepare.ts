@@ -64,6 +64,8 @@ export async function prepare(
     ...properties,
   ], options);
 
+  logger.info(`Executed: '${packCommand.command}'.`);
+
   if (packCommand.failed) {
     throw new Error(`Cannot run 'dotnet pack'!`);
   }
