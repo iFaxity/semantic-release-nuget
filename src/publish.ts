@@ -29,7 +29,7 @@ export async function publish(
   }
 
   // Run the push command.
-  logger.info('Running the dotnet nuget push command.');
+  logger.info(`Running the 'dotnet nuget push' command.`);
 
   const pushCommand = await execPipe('dotnet', [
     'nuget',
@@ -38,6 +38,8 @@ export async function publish(
     ...args,
     ...resolved.pushArguments,
   ], options);
+
+  logger.info(`Executed: '${pushCommand.command}'.`);
 
   if (pushCommand.failed) {
     throw new Error(`Cannot run 'dotnet nuget push'!`);

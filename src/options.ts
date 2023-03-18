@@ -1,4 +1,4 @@
-import { Context } from 'semantic-release';
+import { Config, Context } from 'semantic-release';
 import { z } from 'zod';
 
 const PluginOptions = z.object({
@@ -30,7 +30,7 @@ const PluginOptions = z.object({
 export type PluginOptions = z.infer<typeof PluginOptions>;
 
 export async function resolveOptions(
-    options: Partial<PluginOptions>,
+    options: Config & Partial<PluginOptions>,
     context: Context
 ): Promise<PluginOptions> {
     const { env, nextRelease } = context;
@@ -44,7 +44,7 @@ export async function resolveOptions(
     return PluginOptions.parseAsync({
         project: env.PACK_PROJECT,
         configuration: env.PACK_CONFIGURATION,
-        output: env.PACK_OUTPUT,
+        output: env?.PACK_OUTPUT ?? options.cwd,
         asset: env.NUGET_ASSET,
         source: env.NUGET_SOURCE,
         apiKey: env.NUGET_API_KEY,
