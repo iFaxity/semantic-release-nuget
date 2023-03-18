@@ -48,10 +48,10 @@
     "unbuild": "^1.1.1"
   },
   "peerDependencies": {
-    "semantic-release": "^19.0.5"
+    "semantic-release": ">=18.0.0"
   },
   "dependencies": {
-    "execa": "^5.0.0",
+    "execa": "^5.1.1",
     "zod": "^3.20.2"
   }
 }
